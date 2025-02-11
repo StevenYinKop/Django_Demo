@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+
 # Django
 
 ## Django is Python Web development framework.
@@ -121,5 +123,68 @@ def monthly_challenge(request, month):
 
 4. 重定向路由到另一个View中。使用HttpResponseRedirect，并且通过reverse构造URL
 
+5. 使用HTML Template来渲染网页而非字符串。
+   1. Rendering Complete Pages
+   2. Django Template Language Features
+   3. Working with Static Files(CSS, JavaScript, Images)
+   4. 在项目下创建/templates/<app_name>目录, 然后创建html文件
+   5. 在项目的settings.py文件下，在INSTALLED_APPS中Register你的APP。
+```python
+from django.http.response import HttpResponse
+from django.template.loader import render_to_string
 
-nitty-grittysdqw
+def render():
+    html_string = render_to_string("<app_name>/index.html")
+    return HttpResponse(html_string)
+# 或者
+    from django.shortcuts import render
+    return render(request, "<app_name>/index.html")
+
+```
+ 
+6. 使用DTL(Django Templates Language)
+   1. Enhanced HTML file
+   2. 使用模板语法{{ variable }}来进行变量替换。
+   3. 在render函数中，第三个参数为所有变量组成的dict
+
+7. 在DTL中调用函数（Filter）: https://docs.djangoproject.com/en/5.1/ref/templates/builtins/
+8. 在DTL中使用Tags和for循环、`url` Tag、`if` Tag
+```html
+
+```
+9. Django Template inheritance
+
+在根目录建立一个templates目录，用来存放所有可以复用的html模板。如 `/templates/base.html`
+```html
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>{% block page_title%} default text, could be replaced by real content {% endblock %}</title>
+</head>
+<body>
+  {% blobk content %}
+
+  {% endblock %}
+</body>
+</html>
+```
+
+使用`{% block <block_name> %}` 创建可以复用的html模板，在想要使用这个模板的地方，直接使用：
+
+```html
+{% extends "../../../templates/base.html" %}
+{% block page_title %} All Challenges {% endblock %}
+{% block content %} 
+<ul>
+{% for month in months %}
+<li><a href="/challenges/{{month}}">{{ month|filter }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+```
+但是如果不想这样写相对路径的话，可以在`settings.py`文件的`DIRS`数组中，将`/templates/`加入数组
+
+10. `include` Tag
+

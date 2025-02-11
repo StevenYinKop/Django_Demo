@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title_name %}
+    {{ month|title }}
+{% endblock %}
+{% block content %}
+{% include "./includes/nav.html" %}
+    <h2>
+    {% if content is None %}
+        There is no challenge for this month! Relax!
+    {% else %}
+    {{ content }}
+    {% endif %}
+    </h2>
+{% endblock %}
